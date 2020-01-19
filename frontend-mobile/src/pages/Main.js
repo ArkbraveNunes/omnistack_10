@@ -4,9 +4,13 @@ import  MapView, { Marker, Callout }  from "react-native-maps";
 import { requestPermissionsAsync, getCurrentPositionAsync } from "expo-location";
 import { MaterialIcons } from "@expo/vector-icons";
 
+import  api  from "../services/api";
+
 function Main( { navigation } ) {
     // alert('dwsmdoawmdai')
     const [ currentRegion, setCurrentRegion ] = useState(null);
+    const [ devs, setdevs ] = useState([])
+    const [ techs, setTechs ] = useState('');
 
     useEffect(() => {
         async function loadInitialPosition() {
@@ -31,6 +35,27 @@ function Main( { navigation } ) {
     loadInitialPosition();
     }, []);
 
+    async function loadDevs() {
+        const { latitude, longitude } = currentRegion
+
+        const response = await api.get('/search', {
+            params: {
+                latitude,
+                longitude,
+                technologies: techs,
+            }
+        });
+
+        console.log(response.data.devs)
+
+        setdevs(response.data.devs);
+    }
+    
+    function handleRegionChanged( region ) {
+        console.log(region)
+        setCurrentRegion( region )
+    }
+
     if (!currentRegion) {
         return null;
     }
@@ -38,28 +63,39 @@ function Main( { navigation } ) {
     // alert(JSON.stringify(currentRegion))
     return (
         <>
-            <MapView initialRegion = { currentRegion } style = { styles.map }>
-                <Marker coordinate= {{ latitude: -28.2878125, longitude: -52.4335982 }}>
-                    <Image  style = { styles.avatar } source = {{ uri: 'https://avatars1.githubusercontent.com/u/2254731?s=400&v=4' }}/>
+            <MapView  onRegionChangeComplete= { handleRegionChanged } initialRegion = { currentRegion } style = { styles.map }>
+                {devs.map(dev =>(
+                    <Marker key = {dev._id}coordinate= {{ 
+                        latitude: dev.location.coordinates[1], 
+                        longitude: dev.location.coordinates[0] }}>
+                    <Image  style = { styles.avatar } source = {{ uri: dev.avatar_url }}/>
                     <Callout onPress = {() => {
-                        navigation.navigate('Perfil do Github', { github_username: 'diego3g' })
+                        navigation.navigate('Perfil do Github', { github_username: dev.git_user })
                     } }>
                         <View style = { styles.callout }>
-                            <Text styles = { styles.devName } >Diego Fernandes</Text>
-                            <Text styles = { styles.devBio } >CTO na @Rocketseat. Apaixonado pelas melhores tecnologias de desenvolvimento web e mobile.</Text>
-                            <Text styles = { styles.devTechs } >ReactJS, React Native, NodeJS</Text>
+                            <Text styles = { styles.devName } >{dev.name}</Text>
+                            <Text styles = { styles.devBio } >{dev.bio}</Text>
+                            <Text styles = { styles.devTechs } >{dev.technology.join(', ')}</Text>
                         </View>
                     </Callout>
                 </Marker>
+                ))}
             </MapView>
             <View style = {styles.searchForm}>
-                <TextInput style = { styles.searchInput } placeholder ="Buscar devs por tecnologias..." placeholderTextColor = '#999' autoCapitalize = 'words' autoCorrect = {false}/>
-                <TouchableOpacity onPress = {() => {}} style = { styles.loadButton }>
+                <TextInput style = { styles.searchInput } 
+                    placeholder ="Buscar devs por tecnologias..."
+                    placeholderTextColor = '#999'
+                    autoCapitalize = 'words'
+                    autoCorrect = {false}
+                    value = {techs}
+                    onChangeText = {text => setTechs(text)}/>
+                <TouchableOpacity onPress = { loadDevs } style = { styles.loadButton }>
                     <MaterialIcons name = 'my-location' size = { 20 } colort = "#FFF"></MaterialIcons>
                 </TouchableOpacity>
             </View>
         </>
     )
+
 }
 
 const styles = StyleSheet.create({
@@ -122,6 +158,5 @@ const styles = StyleSheet.create({
         marginLeft: 15,        
     }
 })
-
 
 export default Main;
