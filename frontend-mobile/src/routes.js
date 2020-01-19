@@ -6,15 +6,11 @@ import Profile from './pages/Profile'
 
 const Routes = createAppContainer(
     createStackNavigator({
-        Main: {
+        'DevRadar': {
             screen: Main,
-            title: 'Devradar'
         },
-        Profile: {
+        'Perfil do Github': {
             screen: Profile,
-            navegationOptions: {
-                title: 'Githube Profile'
-            }
         }
     },
     {
