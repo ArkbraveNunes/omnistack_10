@@ -3,7 +3,7 @@ Desenvolvimento do projeto omnistack 10 promovido pela Rocketseat utilizando as 
 
 - Requisitos:
     - Node instalado (preferência versão lts);
-    - Estar em uma rede livre de bloqueios para se concetar as cluster do Mongo DB Atlas ( User: omnistack, Password: omnistack );
+    - Estar em uma rede livre de bloqueios para se concetar ao cluster do Mongo DB Atlas ( User: omnistack, Password: omnistack );
 
 - Backend:
     - Rodar o comando "npm install" pra instalar dependências;
@@ -24,4 +24,4 @@ Desenvolvimento do projeto omnistack 10 promovido pela Rocketseat utilizando as 
         - Ter o aplicativo "Expo" instalado;
         - Escanear o QR Code e acessar o link, assim ele executará;
         - A cada alteração do código o app executando aplica as alterações;
-        - Caso não altere reinicie o app e escaneie novamente o QR Code;
+        - Caso não altere reinicie o app do expo no seu celular e escaneie novamente o QR Code;
