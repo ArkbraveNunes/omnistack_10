@@ -1,6 +1,7 @@
 const axios = require('axios'),
     DevServices = require('../services/DevService'),
-    Str_to_Array = require('./utils/Str_to_Array');
+    Str_to_Array = require('./utils/Str_to_Array'),
+    { findConnections, sendMessage } = require('../webSocket');
 
 /*Recursos de um controller
 index - mostra uma listagem
@@ -32,6 +33,13 @@ module.exports.store = async (req, res) => {
     
     const dev =  await DevServices.postDev( name, git_user, bio, avatar_url, techsArray, location)
     
+    const sendSocketMessageTo = findConnections(
+        { latitude, longitude },
+        techsArray
+    )    
+
+    sendMessage( sendSocketMessageTo, 'new-dev', dev)
+
     return res.json(dev)
     
 }

@@ -5,9 +5,9 @@ import { requestPermissionsAsync, getCurrentPositionAsync } from "expo-location"
 import { MaterialIcons } from "@expo/vector-icons";
 
 import  api  from "../services/api";
+import  { connect, disconnect, subscribeToNewDevs }  from "../services/socket";
 
 function Main( { navigation } ) {
-    // alert('dwsmdoawmdai')
     const [ currentRegion, setCurrentRegion ] = useState(null);
     const [ devs, setdevs ] = useState([])
     const [ techs, setTechs ] = useState('');
@@ -35,6 +35,17 @@ function Main( { navigation } ) {
     loadInitialPosition();
     }, []);
 
+    useEffect(() => { subscribeToNewDevs(dev => setdevs([...devs, dev])) }, [devs])
+
+    function setupwebSocket() {
+        disconnect();
+        const { latitude, longitude } =  currentRegion;
+        
+        connect( latitude, longitude, techs );
+
+
+    }
+
     async function loadDevs() {
         const { latitude, longitude } = currentRegion
 
@@ -46,9 +57,10 @@ function Main( { navigation } ) {
             }
         });
 
-        console.log(response.data.devs)
+        // console.log(response.data.devs)
 
         setdevs(response.data.devs);
+        setupwebSocket()
     }
     
     function handleRegionChanged( region ) {
@@ -60,7 +72,6 @@ function Main( { navigation } ) {
         return null;
     }
 
-    // alert(JSON.stringify(currentRegion))
     return (
         <>
             <MapView  onRegionChangeComplete= { handleRegionChanged } initialRegion = { currentRegion } style = { styles.map }>
