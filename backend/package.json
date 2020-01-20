@@ -4,7 +4,7 @@
   "description": "Aplicação desenvolvida em Node.js, React e React Native",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "start": "nodemon src/index.js"
   },
   "author": "Jean Nunes",
   "license": "ISC",
