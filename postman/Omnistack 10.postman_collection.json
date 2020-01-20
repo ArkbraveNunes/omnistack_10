@@ -1,0 +1,95 @@
+{
+	"info": {
+		"_postman_id": "56abe775-021d-4c5e-9003-95b71a5c4ff4",
+		"name": "Omnistack 10",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "all devs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/devs",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"devs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search dev",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/search?latitude=-28.2724265&longitude=-52.4145824&technologies=Node.js&distance=10000",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"search"
+					],
+					"query": [
+						{
+							"key": "latitude",
+							"value": "-28.2724265"
+						},
+						{
+							"key": "longitude",
+							"value": "-52.4145824"
+						},
+						{
+							"key": "technologies",
+							"value": "Node.js"
+						},
+						{
+							"key": "distance",
+							"value": "10000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "dev register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"git_user\": \"jose\",\n    \"technologies\": \"Node.js, Python\",\n    \"latitude\": -28.2024265,\n    \"longitude\": -52.4145824\n\t\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/devs",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"devs"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
