@@ -25,8 +25,28 @@ const postDev = (name = git_user, git_user, bio, avatar_url, technology, locatio
     })
 }
 
+const updateDev = (dev) => {
+    return new Promise( async(resolve, reject) =>{
+        await devPerson.findOneAndUpdate({ _id: dev.id }, dev, {
+            new: true
+        })
+        .then(dev => resolve(dev))
+        .catch(err => reject(err));
+    })
+}
+
+const deleteDev = (id) => {
+    return new Promise( async(resolve, reject) => {
+        await devPerson.findOneAndDelete({ _id: id })
+        .then(dev => resolve(dev))
+        .catch(err => reject(err));
+    })
+}
+
 module.exports = {
     findOneDev,
     findDev,
-    postDev
+    postDev,
+    updateDev,
+    deleteDev
 }

@@ -49,5 +49,28 @@ module.exports.index = async (req, res) => {
     return res.status(200).json(devs)
 }
 
+module.exports.update = async (req, res) => {
+    const { id, name, bio, technology } = req.body;
+
+    let dev = { id }
+
+    if (name) dev.name = name;
+
+    if (bio) dev.bio = bio;
+    
+    if (technology) dev.technology = technology
+
+    const devUpdated =  await DevServices.updateDev(dev)
+
+    return res.json(devUpdated).status(200)
+}
+
+module.exports.destroy = async (req, res) => {
+    const { id } = req.query;
+    
+    const devDeleted = await DevServices.deleteDev(id)
+    
+    return res.json(devDeleted).status(200)
+}
 
  
