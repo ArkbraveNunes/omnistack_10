@@ -1,0 +1,237 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "",
+    "version": "1.0.0",
+    "title": "Swagger Dev App",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "apiteam@swagger.io"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "devApp.swagger.io",
+  "basePath": "/localhost:3333",
+  "tags": [
+    {
+      "name": "devs",
+      "description": "Details about registered devs",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "http://swagger.io"
+      }
+    },
+    {
+      "name": "search",
+      "description": "Search the dev",
+      "externalDocs": {
+        "description": "Find out more about our store",
+        "url": "http://swagger.io"
+      }
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/devs": {
+      "post": {
+        "tags": [
+          "devs"
+        ],
+        "summary": "Add a new dev to the store",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Dev object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DevPost"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucessfull"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "devs"
+        ],
+        "summary": "Update an existing Dev",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Dev object that needs to be added to the store",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DevUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucessfull"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "devs"
+        ],
+        "summary": "Get all Devs",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/DevGet"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "DevPost": {
+      "type": "object",
+      "required": [
+        "git_user",
+        "technologies",
+        "latitude",
+        "longitude"
+      ],
+      "properties": {
+        "git_user": {
+          "type": "string",
+          "example": "jpdemagalhaes"
+        },
+        "technologies": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "Node.js, React.js"
+          }
+        },
+        "latitude": {
+          "type": "number",
+          "example": -28.2024265
+        },
+        "longitude": {
+          "type": "number",
+          "example": -52.4145824
+        }
+      }
+    },
+    "DevUpdate": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "5e1debb6df2cc044ac8bf373"
+        },
+        "technology": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "Node.js, React.js"
+          }
+        },
+        "bio": {
+          "type": "string",
+          "example": "Eu amo programar em Java (mentira)"
+        },
+        "name": {
+          "type": "string",
+          "example": "Diego Fernandes"
+        }
+      }
+    },
+    "DevGet": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "5e1debb6df2cc044ac8bf373"
+          },
+          "name": {
+            "type": "string",
+            "example": "Diego Fernandes"
+          },
+          "technology": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Node.js, React.js"
+            }
+          },
+          "bio": {
+            "type": "string",
+            "example": "Eu amo programar em Java (mentira)"
+          },
+          "git_user": {
+            "type": "string",
+            "example": "diego3g"
+          },
+          "avatar_url": {
+            "type": "string",
+            "example": "https://avatars2.githubusercontent.com/u/2254731?v=4"
+          },
+          "location": {
+            "type": "object",
+            "properties": {
+              "coordinates": {
+                "type": "array",
+                "items": {
+                  "type": "number",
+                  "example": "-52.4145824, -28.2724265"
+                }
+              },
+              "_id": {
+                "type": "string",
+                "example": "5e1debb6df2cc044ac8bf374"
+              },
+              "type": {
+                "type": "string",
+                "example": "Point"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
