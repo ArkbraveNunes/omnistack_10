@@ -13,8 +13,8 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "host": "devApp.swagger.io",
-  "basePath": "/localhost:3333",
+  "host": "localhost:3333",
+  "basePath": "/",
   "tags": [
     {
       "name": "devs",
@@ -34,7 +34,6 @@
     }
   ],
   "schemes": [
-    "https",
     "http"
   ],
   "paths": {
@@ -58,13 +57,44 @@
             "description": "Dev object that needs to be added to the store",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/DevPost"
+              "$ref": "#/definitions/DevsPost"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Sucessfull"
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Dev"
+            }
+          },
+          "404": {
+            "description": "",
+            "type":"object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Gitub temporarily unavailable"
+              } 
+            }
+          },
+          "400": {
+            "description": "",
+            "type":"object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Usuario jpmagalhaes já cadastrado"
+              } 
+            }
+          },
+          "500": {
+            "description": "",
+            "type": "object",
+            "properties": {
+              "message": "string",
+              "example": "Erro inesperado no servidor!"
+            }
           }
         }
       },
@@ -87,13 +117,16 @@
             "description": "Dev object that needs to be added to the store",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/DevUpdate"
+              "$ref": "#/definitions/DevsUpdate"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Sucessfull"
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Dev"
+            }
           }
         }
       },
@@ -103,9 +136,6 @@
         ],
         "summary": "Get all Devs",
         "description": "",
-        "consumes": [
-          "application/json"
-        ],
         "produces": [
           "application/json"
         ],
@@ -113,7 +143,78 @@
           "200": {
             "description": "",
             "schema": {
-              "$ref": "#/definitions/DevGet"
+              "$ref": "#/definitions/DevsGet"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "devs"
+        ],
+        "summary": "Delete dev",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "string",
+            "description": "Dev Id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/DevsDelete"
+            }
+          }
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "tags": [
+          "search"
+        ],
+        "summary": "Search Dev",
+        "description": "This can only be done by the logged in user.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "latitide",
+            "type": "number",
+            "description": "Latitude value of dev ",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "longitude",
+            "type": "number",
+            "description": "Longitude value of dev",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "technologies",
+            "type": "number",
+            "description": "List technologies of dev",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": {
+              "schema": {
+                "$ref": "#/definitions/DevsGet"
+              }
             }
           }
         }
@@ -121,7 +222,7 @@
     }
   },
   "definitions": {
-    "DevPost": {
+    "DevsPost": {
       "type": "object",
       "required": [
         "git_user",
@@ -151,7 +252,7 @@
         }
       }
     },
-    "DevUpdate": {
+    "DevsUpdate": {
       "type": "object",
       "required": [
         "id"
@@ -178,58 +279,82 @@
         }
       }
     },
-    "DevGet": {
+    "DevsGet": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "_id": {
+          "schema": {
+            "$ref": "#/definitions/Dev"
+          }
+        }
+      }
+    },
+    "DevsDelete": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "$ref": "#/definitions/Dev"
+        }
+      }
+    },
+    "Dev": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "5e1debb6df2cc044ac8bf373"
+        },
+        "name": {
+          "type": "string",
+          "example": "Diego Fernandes"
+        },
+        "technology": {
+          "type": "array",
+          "items": {
             "type": "string",
-            "example": "5e1debb6df2cc044ac8bf373"
-          },
-          "name": {
-            "type": "string",
-            "example": "Diego Fernandes"
-          },
-          "technology": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "example": "Node.js, React.js"
-            }
-          },
-          "bio": {
-            "type": "string",
-            "example": "Eu amo programar em Java (mentira)"
-          },
-          "git_user": {
-            "type": "string",
-            "example": "diego3g"
-          },
-          "avatar_url": {
-            "type": "string",
-            "example": "https://avatars2.githubusercontent.com/u/2254731?v=4"
-          },
-          "location": {
-            "type": "object",
-            "properties": {
-              "coordinates": {
-                "type": "array",
-                "items": {
-                  "type": "number",
-                  "example": "-52.4145824, -28.2724265"
-                }
-              },
-              "_id": {
-                "type": "string",
-                "example": "5e1debb6df2cc044ac8bf374"
-              },
-              "type": {
-                "type": "string",
-                "example": "Point"
-              }
+            "example": "Node.js, React.js"
+          }
+        },
+        "bio": {
+          "type": "string",
+          "example": "Eu amo programar em Java (mentira)"
+        },
+        "git_user": {
+          "type": "string",
+          "example": "diego3g"
+        },
+        "avatar_url": {
+          "type": "string",
+          "example": "https://avatars2.githubusercontent.com/u/2254731?v=4"
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "schema": {
+              "$ref": "#/definitions/Location"
             }
           }
+        }
+      }
+    },
+    "Location": {
+      "type": "object",
+      "properties": {
+        "coordinates": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "example": "-52.4145824, -28.2724265"
+          }
+        },
+        "_id": {
+          "type": "string",
+          "example": "5e1debb6df2cc044ac8bf374"
+        },
+        "type": {
+          "type": "string",
+          "example": "Point"
         }
       }
     }
