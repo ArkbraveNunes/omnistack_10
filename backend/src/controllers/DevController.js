@@ -72,6 +72,7 @@ module.exports.update = async (req, res) => {
 }
 
 module.exports.destroy = async (req, res) => {
+    
     const { id } = req.query;
     
     const devDeleted = await DevServices.deleteDev(id)
