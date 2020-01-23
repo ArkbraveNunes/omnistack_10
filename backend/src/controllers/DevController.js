@@ -20,27 +20,33 @@ const doubleCheckDev = ( git_user ) => {
 }
 
 module.exports.store = async (req, res) => {
-    const { git_user, technologies, latitude, longitude } = req.body;
+    try {
+        const { git_user, technologies, latitude, longitude } = req.body;
 
-    if (await doubleCheckDev(git_user)) return res.status(400).json({message:`Usuário ${git_user} já cadastrado!`})
+        if (await doubleCheckDev(git_user)) return res.status(400).json({message:`Usuário ${git_user} já cadastrado!`})
 
-    const location = { type: 'Point', coordinates: [longitude, latitude] }
+        const location = { type: 'Point', coordinates: [longitude, latitude] }
 
-    techsArray = Str_to_Array(technologies)
+        techsArray = Str_to_Array(technologies)
 
-    const apiGitResponse = await axios.get(`https://api.github.com/users/${git_user}`).catch(err => res.status(400).json({}))
-    let { name , avatar_url, bio } = apiGitResponse.data;
-    
-    const dev =  await DevServices.postDev( name, git_user, bio, avatar_url, techsArray, location)
-    
-    const sendSocketMessageTo = findConnections(
-        { latitude, longitude },
-        techsArray
-    )    
+        const apiGitResponse = await axios.get(`https://api.github.com/users/${git_user}`).catch(err => res.status(404).json({message: `Gitub temporarily unavailable`}))
+        let { name , avatar_url, bio } = apiGitResponse.data;
+        
+        const dev =  await DevServices.postDev( name, git_user, bio, avatar_url, techsArray, location)
+        
+        const sendSocketMessageTo = findConnections(
+            { latitude, longitude },
+            techsArray
+        )    
 
-    sendMessage( sendSocketMessageTo, 'new-dev', dev)
+        sendMessage( sendSocketMessageTo, 'new-dev', dev)
 
-    return res.json(dev)
+        return res.json(dev)
+    } 
+    catch {
+
+        return res.status(500).json({message:`Erro inesperado no servidor!`})
+    }
     
 }
 
